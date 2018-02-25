@@ -8,6 +8,8 @@ use App\Cart;
 
 use App\Http\Requests;
 use Session;
+use Stripe\Charge;
+use Stripe\Stripe;
 
 class ProductController extends Controller
 {
@@ -52,5 +54,34 @@ class ProductController extends Controller
     	$cart = new Cart($oldCart);
     	$total = $cart->totalPrice;
     	return view('shop.checkout', ['total' => $total]); // we pass the total price to the view
+    }
+
+    public function postCheckout(Request $request)
+    {
+        // I can now handle the request which will have this hidden stripe token send with it to actually make a charge
+
+        // check if we do have a shopping cart
+        if (!Session::has('cart')) {
+            return redirect()->route('product.shoppingCart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart('$oldCart');
+        // if we do have the cart
+        // we need to save the secret key
+        Stripe::setApiKey('sk_test_1VJ55Nz9SrbRVknD94CutDsW');
+        try {
+            Charge::create(array(
+                "amount" => $cart->totalPrice * 100,
+                "currency" => "usd",
+                "source" => $request->input('stripeToken'), // obtained with Stripe.js
+                "description" => "Test Charge Grad"
+            ));
+        } catch (\Exceptoin $e) {
+            return redirect()->route('checkout')->with('error', $e->getMessage());
+        }
+
+        // delete from the session because we checked out
+        Session::forget('cart');
+        return redirect()->route('product.index')->with('success', 'Successfully purchased products');
     }
 }

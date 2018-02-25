@@ -10,7 +10,7 @@ class Cart
 
     // Constructor that it allows me to recreate this cart based on the oldCart so that information gets lost
     public function __construct($oldCart)
-    {
+    {   
     	if ($oldCart) {
     		$this->items = $oldCart->items;
     		$this->totalQty = $oldCart->totalQty;
