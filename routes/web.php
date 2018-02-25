@@ -2,7 +2,7 @@
 
 Route::get('/', [
     'uses' => 'ProductController@getIndex',
-    'as' => 'product.index'
+    'as' => 'product.index' // this is the name
 ]);
 
 Route::get('/addToCart/{id}', [
@@ -13,6 +13,16 @@ Route::get('/addToCart/{id}', [
 Route::get('/shoppingCart', [
 	'uses' => 'ProductController@getCart',
 	'as' => 'product.shoppingCart'
+]);
+
+Route::get('/checkout', [
+	'uses' => 'ProductController@getCheckout', // getCheckout action in the Controller
+	'as' => 'checkout' // this is the name
+]);
+
+Route::post('/checkout', [
+	'uses' => 'ProductController@postCheckout', 
+	'as' => 'checkout' // this is the name
 ]);
 
 Route::group(['prefix' => 'user'], function() {

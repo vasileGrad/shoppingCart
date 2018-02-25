@@ -41,4 +41,16 @@ class ProductController extends Controller
     	$cart = new Cart($oldCart);
     	return view('shop.shoppingCart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
+
+    public function getCheckout() 
+    {	// check if I do have a cart
+    	if (!Session::has('cart')) {
+    		return view('shop.shoppingCart');
+    	}
+    	// If we do have a cart
+    	$oldCart = Session::get('cart');
+    	$cart = new Cart($oldCart);
+    	$total = $cart->totalPrice;
+    	return view('shop.checkout', ['total' => $total]); // we pass the total price to the view
+    }
 }
