@@ -27,7 +27,18 @@ class ProductController extends Controller
 
     	// to put the cart back into it or in to it for the first time if we didn't have it before and than I want to serialize the card we just created 
     	$request->session()->put('cart', $cart);
-    	dd($request->session()->get('cart'));
+    	//dd($request->session()->get('cart'));
     	return redirect()->route('product.index');
+    }
+
+    public function getCart()
+    {	// check if we do not have a cart stored in the session
+    	if (!Session::has('cart')) {
+    		return view('shop.shoppingCart');
+    	}
+    	// otherwise, if we do have a cart 
+    	$oldCart = Session::get('cart');
+    	$cart = new Cart($oldCart);
+    	return view('shop.shoppingCart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
 }
