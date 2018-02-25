@@ -64,3 +64,8 @@
 		</div>
 	</div>
 @endsection
+
+@section('scripts')
+	<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+	<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+@endsection
